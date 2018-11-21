@@ -1,0 +1,91 @@
+
+------Atrasados-----------------------------------
+--160 Amanda	Gestante	12/03/17
+select ev.id as evento_id
+     , lan.*
+     
+-- select lan.dt_vencto, count(1), sum(lan.valor)
+-- relacao que passo pro meu Amor
+-- select lan.valor, lan.descricao, lan.dt_vencto
+from App_Evento_evento ev
+   , Evento_Pessoa ep
+   , App_Financeiro_lancto lan
+where ep.fk_evento_id_id = ev.id
+  and lan.fk_evento_pessoa_id = ep.id
+  --and ev.id not in (4,11,50,57)
+  and lan.dt_pgto is null
+  --acertar carga do dia '2018-11-15'
+  --and lan.dt_vencto  = '2018-11-15'
+
+--    group by lan.dt_vencto  order by 1
+ order by lan.dt_vencto
+
+order by lan.dt_vencto
+  ;
+  
+
+------Recebto Mensal-----------------------------------
+select trunc(lan.dt_pgto), count(1), sum(lan.valor)
+from App_Evento_evento ev
+   , Evento_Pessoa ep
+   , App_Financeiro_lancto lan
+where ep.fk_evento_id_id = ev.id
+  and lan.fk_evento_pessoa_id = ep.id
+  and ev.id not in (4,11,50,57)
+  and lan.dt_pgto is not null
+  --acertar carga do dia '2018-11-15'
+  --and lan.dt_vencto  = '2018-11-15'
+
+group by trunc(lan.dt_pgto) order by 1
+  ;
+
+select * from App_Financeiro_lancto lan
+where dt_alt is not null
+order by dt_alt desc
+
+-----------------------ajustar dt_pgto com dt_vcto-------------------
+select * 
+from App_Financeiro_lancto lan
+--    update App_Financeiro_lancto set dt_pgto = dt_vencto
+where dt_pgto is not null
+  and dt_pgto <> dt_vencto;
+  
+
+-----------------------verificar evento_pessoa sem lancamento-------------------
+--update App_Financeiro_lancto set dt_pgto = dt_vencto
+select ev.*
+from Evento_Pessoa ep
+   , App_Evento_evento ev
+where ep.fk_evento_id_id = ev.id
+  and not exists ( select 1 
+                   from App_Financeiro_lancto lan
+                   where lan.fk_evento_pessoa_id = ep.id )
+  --and ev.id not in (4,11)
+  --and ev.parcelas > 0
+order by 1;
+
+-----------------------Evento.total = sum(lancto)???-------------------
+--update App_Financeiro_lancto set dt_pgto = dt_vencto
+
+select *
+from ( select ev.id as evento_id
+            , ev.descricao
+            , count(1) parcela_qt
+            , sum(lan.valor) parcela_valor
+       from App_Evento_evento ev
+          , Evento_Pessoa ep
+          , App_Financeiro_lancto lan
+       where ep.fk_evento_id_id = ev.id
+         and lan.fk_evento_pessoa_id = ep.id
+         and ev.id not in (4,11,50,57)
+       group by ev.id
+              , ev.descricao ) v
+where not exists ( select 1
+                   from App_Evento_evento ev
+                   where ev.id = v.evento_id
+                     and ev.parcelas = v.parcela_qt
+                       and ev.valor  = v.parcela_valor )
+  ;
+
+
+

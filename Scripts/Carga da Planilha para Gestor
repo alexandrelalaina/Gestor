@@ -1,0 +1,9 @@
+--1.1) pessoa
+
+--1.2) pessoa_tipo => Cliente --depois deleto, pq terei noiva, noivo, gestante
+
+--1.3) pessoa_pessoa_tipo => Cliente
+
+--2.1) Evento_Tipo => Casamento --depois deleto
+
+--2.2) Evento_pessoa => nem vou criar, so vai dar trabalho e nao estara perto do correto
