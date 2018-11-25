@@ -32,6 +32,7 @@ class Conta(models.Model):
       return self.descricao
 
     class Meta:
+        db_table = 'conta'
         ordering = ["descricao"]
         verbose_name_plural = 'Contas'
 
@@ -45,6 +46,7 @@ class Grupo(models.Model):
       return self.descricao
 
     class Meta:
+        db_table = 'grupo'
         ordering = ["descricao"]
         verbose_name_plural = 'Grupos'
 
@@ -63,19 +65,21 @@ class TipoPagto(models.Model):
       return self.descricao
 
     class Meta:
+        db_table = 'tipo_pagamento'
         ordering = ["descricao"]
         verbose_name_plural = 'Tipos de Pagamentos'
 
 
 class Orcamento(models.Model):
     id = models.AutoField(primary_key=True)
-    fk_grupo_id = models.ForeignKey(Grupo, on_delete=models.PROTECT)
+    fk_grupo_id = models.ForeignKey(Grupo, db_column = 'fk_grupo_id', on_delete=models.PROTECT)
     ano = models.IntegerField()
     mes = models.IntegerField()
     valor = models.DecimalField(max_digits=7, decimal_places=2)
     #TODO: fazer gerar para todos quando for o primeiro mes
 
     class Meta:
+        db_table = 'orcamento'
         verbose_name_plural = 'Orçamentos'
         unique_together = (('fk_grupo_id', 'ano', 'mes'),)
 
@@ -84,24 +88,26 @@ class Orcamento(models.Model):
 
 
 class Conta_Grupo_Tipo_Pagto(models.Model):
-    fk_conta_id = models.ForeignKey(Conta, on_delete=models.PROTECT)
-    fk_grupo_id = models.ForeignKey(Grupo, on_delete=models.PROTECT)
-    fk_tipo_pagto_id = models.ForeignKey(TipoPagto, on_delete=models.PROTECT)
+    id = models.AutoField(primary_key=True)
+    fk_conta_id = models.ForeignKey(Conta, db_column = 'fk_conta_id', on_delete=models.PROTECT)
+    fk_grupo_id = models.ForeignKey(Grupo, db_column = 'fk_grupo_id', on_delete=models.PROTECT)
+    fk_tipo_pagto_id = models.ForeignKey(TipoPagto, db_column = 'fk_tipo_pagto_id', on_delete=models.PROTECT)
     cd_tipo = models.CharField(max_length=1, choices=CHOICES_CD_TIPO)
     cd_contabil = models.CharField(max_length=1, choices=CHOICES_SIM_NAO)
     obs = models.TextField(max_length=4000, null=True, blank=True)
 
     class Meta:
+        db_table = 'conta_grupo_tipo_pagto'
         verbose_name_plural = 'Parametrização de Conta/Grupo/Tipo Pagto'
         unique_together = (('fk_conta_id', 'fk_grupo_id', 'fk_tipo_pagto_id'),)
 
 
 class Lancto(models.Model):
     id = models.AutoField(primary_key=True)
-    fk_conta = models.ForeignKey(Conta, on_delete=models.PROTECT)
-    fk_grupo = models.ForeignKey(Grupo, on_delete=models.PROTECT)
-    fk_tipo_pagto = models.ForeignKey(TipoPagto, on_delete=models.PROTECT)
-    fk_evento_pessoa = models.ForeignKey(EventoPessoa, on_delete=models.PROTECT, null=True, blank=True)
+    fk_conta_id = models.ForeignKey(Conta, db_column = 'fk_conta_id', on_delete=models.PROTECT)
+    fk_grupo_id = models.ForeignKey(Grupo, db_column = 'fk_grupo_id', on_delete=models.PROTECT)
+    fk_tipo_pagto_id = models.ForeignKey(TipoPagto, db_column = 'fk_tipo_pagto_id', on_delete=models.PROTECT)
+    fk_evento_pessoa_id = models.ForeignKey(EventoPessoa, db_column = 'fk_evento_pessoa_id', on_delete=models.PROTECT, null=True, blank=True)
     descricao = models.CharField(max_length=50)
     dt_cad    = models.DateField()
     dt_vencto = models.DateField()
@@ -131,6 +137,7 @@ class Lancto(models.Model):
     #         return 'Não'
 
     class Meta:
+        db_table = 'titulo'
         ordering = ["dt_vencto", "dt_cad"]
         verbose_name_plural = 'Lançamentos'
 
@@ -230,12 +237,13 @@ def update_stock(sender, instance, created, **kwargs):
 
 class LanctoExtrato(models.Model):
     id = models.AutoField(primary_key=True)
-    fk_lancto_id = models.ForeignKey(Lancto, on_delete=models.PROTECT)
+    fk_titulo_id = models.ForeignKey(Lancto, db_column = 'fk_titulo_id', on_delete=models.PROTECT)
     dt_cad = models.DateField()
     valor_saldo_anterior = models.DecimalField(max_digits=7, decimal_places=2)
     valor_saldo_atualizado = models.DecimalField(max_digits=7, decimal_places=2)
 
     class Meta:
+        db_table = 'titulo_extrato'
         verbose_name_plural = 'Extrato da Conta'
 
     #TODO: ver como colocar read only

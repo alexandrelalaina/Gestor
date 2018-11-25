@@ -28,10 +28,11 @@ class EventoPessoaAdmin(admin.ModelAdmin):
 
 class EventoAdmin(admin.ModelAdmin):
     inlines = [EnderecoInline, EventoPessoaInline]
-    list_display = ['id', 'getQtEventoPessoa', 'getLanctoPagar', 'getLanctoReceber',  'fk_evento_tipo', 'descricao', 'dt_evento', 'dt_cad', 'valor', 'parcelas', 'dt_alt', ]
+    list_display = ['id', 'getQtEventoPessoa', 'getLanctoPagar', 'getLanctoReceber',  'fk_evento_tipo_id', 'descricao', 'dt_evento', 'dt_cad', 'valor', 'parcelas', 'dt_alt', ]
     list_filter = ( 'fk_evento_tipo_id', 'dt_evento', 'dt_cad', 'valor', )
-    search_fields = ['id', 'descricao', 'fk_evento_tipo__descricao']
+    search_fields = ['id', 'descricao', 'fk_evento_tipo_id__descricao']
     #link_fields = ('id', 'fk_evento_tipo', 'descricao')
+
 
 class Evento_TipoAdmin(admin.ModelAdmin):
     list_display = ['id', 'descricao', ]

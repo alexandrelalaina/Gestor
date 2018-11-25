@@ -14,6 +14,7 @@ class Pessoa_Tipo(models.Model):
      return self.descricao
 
    class Meta:
+     db_table = 'pessoa_tipo'
      ordering = ["descricao",]
      verbose_name_plural = 'Tipos de Pessoas'
 
@@ -26,6 +27,7 @@ class Contato_Tipo(models.Model):
      return self.descricao
 
    class Meta:
+     db_table = 'contato_tipo'
      ordering = ["descricao",]
      verbose_name_plural = 'Tipos de Contatos'
 
@@ -38,6 +40,7 @@ class Endereco_Tipo(models.Model):
      return self.descricao
 
    class Meta:
+     db_table = 'endereco_tipo'
      ordering = ["descricao",]
      verbose_name_plural = 'Tipos de Endereços'
 
@@ -57,31 +60,36 @@ class Pessoa(models.Model):
       return self.nome
 
     class Meta:
+        db_table = 'pessoa'
         ordering = ["nome", "dt_cad"]
         verbose_name_plural = 'Pessoas'
 
 
 class Contato(models.Model):
     id = models.AutoField(primary_key=True)
-    fk_contato_tipo_id = models.ForeignKey(Contato_Tipo, on_delete=models.PROTECT)
-    fk_pessoa_id = models.ForeignKey(Pessoa, on_delete=models.PROTECT)
+    fk_contato_tipo_id = models.ForeignKey(Contato_Tipo, db_column = 'fk_contato_tipo_id', on_delete=models.PROTECT)
+    fk_pessoa_id = models.ForeignKey(Pessoa, db_column = 'fk_pessoa_id', on_delete=models.PROTECT)
     vl_alfa = models.CharField(max_length=30)
 
     def __str__(self):
       return self.vl_alfa
 
     class Meta:
+        db_table = 'contato'
         ordering = ["vl_alfa", ]
         verbose_name_plural = 'Contatos'
 
 
 class Pessoa_Pessoa_Tipo(models.Model):
+
     class Meta:
+        db_table = 'pessoa_pessoa_tipo'
         unique_together = (('fk_pessoa_id', 'fk_pessoa_tipo_id'),)
         verbose_name_plural = 'Pessoa Tipos'
 
-    fk_pessoa_id = models.ForeignKey(Pessoa, on_delete=models.PROTECT)
-    fk_pessoa_tipo_id = models.ForeignKey(Pessoa_Tipo, on_delete=models.PROTECT)
+    id = models.AutoField(primary_key=True)
+    fk_pessoa_id = models.ForeignKey(Pessoa, db_column = 'fk_pessoa_id', on_delete=models.PROTECT)
+    fk_pessoa_tipo_id = models.ForeignKey(Pessoa_Tipo, db_column = 'fk_pessoa_tipo_id',  on_delete=models.PROTECT)
 
     def __str__(self):
       #TODO: Ajustar aqui
@@ -91,10 +99,10 @@ from App_Evento.models import Evento
 
 class Endereco(models.Model):
     id = models.AutoField(primary_key=True)
-    fk_endereco_tipo_id = models.ForeignKey(Endereco_Tipo, on_delete=models.PROTECT)
+    fk_endereco_tipo_id = models.ForeignKey(Endereco_Tipo, db_column = 'fk_endereco_tipo_id', on_delete=models.PROTECT)
     #todo: fazer uma validacao para ser um ou outro
-    fk_pessoa_id = models.ForeignKey(Pessoa, on_delete=models.PROTECT, blank=True, null=True)
-    fk_evento_id = models.ForeignKey(Evento, on_delete=models.PROTECT, blank=True, null=True)
+    fk_pessoa_id = models.ForeignKey(Pessoa, db_column = 'fk_pessoa_id',  on_delete=models.PROTECT, blank=True, null=True)
+    fk_evento_id = models.ForeignKey(Evento, db_column = 'fk_evento_id',  on_delete=models.PROTECT, blank=True, null=True)
     cep = models.IntegerField(null=True, blank=True)
     pais = models.CharField(max_length=20, null=True, blank=True)
     uf = models.CharField(max_length=20, null=True, blank=True)
@@ -110,6 +118,7 @@ class Endereco(models.Model):
       return self.endereco
 
     class Meta:
+      db_table = 'endereco'
       verbose_name_plural = 'Endereços'
 
 

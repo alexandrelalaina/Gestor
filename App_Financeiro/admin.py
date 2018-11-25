@@ -23,7 +23,7 @@ class GrupoAdmin(admin.ModelAdmin):
 
 
 class LanctoAdmin(admin.ModelAdmin):
-    list_display = ['id', 'descricao', 'dt_cad', 'dt_vencto', 'dt_pgto', 'valor', 'cd_tipo', 'parcela', 'parcela_total', 'fk_conta', 'fk_grupo', 'fk_tipo_pagto', 'fk_evento_pessoa',  'dt_alt', ]
+    list_display = ['id', 'descricao', 'dt_cad', 'dt_vencto', 'dt_pgto', 'valor', 'cd_tipo', 'parcela', 'parcela_total', 'fk_conta_id', 'fk_grupo_id', 'fk_tipo_pagto_id', 'fk_evento_pessoa_id',  'dt_alt', ]
     # fields = [ ('descricao', 'fk_evento_pessoa'),
     #            ('fk_conta', 'fk_grupo', 'fk_tipo_pagto'),
     #            ('dt_cad', 'dt_vencto', 'dt_pgto'),
@@ -37,7 +37,7 @@ class LanctoAdmin(admin.ModelAdmin):
     #
     #               )
 
-    list_filter = ('fk_conta', 'fk_grupo', 'fk_tipo_pagto', 'dt_cad', 'dt_vencto', 'dt_pgto', )
+    list_filter = ('fk_conta_id', 'fk_grupo_id', 'fk_tipo_pagto_id', 'dt_cad', 'dt_vencto', 'dt_pgto', )
     search_fields = ['descricao']
 
     # continuar aqiuo autocomplete

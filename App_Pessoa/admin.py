@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Pessoa_Tipo, Pessoa, Contato_Tipo, Endereco_Tipo, Endereco, Contato, Pessoa_Pessoa_Tipo
+from .models import Pessoa_Tipo, Pessoa, Contato_Tipo, Endereco_Tipo, Endereco, Contato #pause voltar, Pessoa_Pessoa_Tipo
 
 
 ########## P e s s o a - A d m i n ###############################
@@ -14,13 +14,14 @@ class PessoaEnderecoInline(admin.TabularInline):
     extra = 1 #qtos itens serao mostrados
 
 
-class PessoaPessoaTipoInline(admin.TabularInline):
-    model = Pessoa_Pessoa_Tipo
-    extra = 1 #qtos itens serao mostrados
+# pause voltar
+# class PessoaPessoaTipoInline(admin.TabularInline):
+#     model = Pessoa_Pessoa_Tipo
+#     extra = 1 #qtos itens serao mostrados
 
 
 class PessoaAdmin(admin.ModelAdmin):
-    inlines = [PessoaContatoInline, PessoaEnderecoInline, PessoaPessoaTipoInline]
+# pause voltar    inlines = [PessoaContatoInline, PessoaEnderecoInline, PessoaPessoaTipoInline]
     list_display = ['id', 'nome', ]
     search_fields = ['id', 'nome', ]
 
@@ -39,4 +40,4 @@ admin.site.register(Contato_Tipo)
 admin.site.register(Endereco_Tipo)
 admin.site.register(Endereco)
 admin.site.register(Contato)
-admin.site.register(Pessoa_Pessoa_Tipo)
+# admin.site.register(Pessoa_Pessoa_Tipo)

@@ -1,11 +1,5 @@
 from django.db import models
 
-# from App_Pessoa.models import Pessoa_Pessoa_Tipo
-# from App_Pessoa.models import Pessoa_Pessoa_Tipo
-# from Gestor.App_Pessoa.models import Pessoa_Pessoa_Tipo
-# from App_Pessoa.models import Pessoa
-
-#from App_Pessoa.models import Pessoa_Pessoa_Tipo
 from django.db.models import F, Min, FloatField, Count
 
 
@@ -17,42 +11,14 @@ class Evento_Tipo(models.Model):
         return self.descricao
 
     class Meta:
+        db_table = 'evento_tipo'
         ordering = ["descricao", ]
         verbose_name_plural = 'Tipos de Eventos'
 
 
-# class Teste(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     descricao = models.CharField(max_length=30)
-#
-#     def __str__(self):
-#         return self.descricao
-#
-#     class Meta:
-#         db_table = 'Teste'
-#         ordering = ["descricao", ]
-#         verbose_name_plural = 'Tipos de Eventos'
-
-
-# class Evento_Pessoa(models.Model):
-#     fk_pessoa_pessoa_tipo_pessoa_id = models.ForeignKey(Pessoa_Pessoa_, on_delete=models.PROTECT)
-#
-#     fk_pessoa_pessoa_tipo_pessoa_tipo_id = models.ForeignKey(Pessoa, on_delete=models.PROTECT)
-#
-#     fk_pessoa_tipo_id = models.ForeignKey(Pessoa_Tipo, on_delete=models.PROTECT)
-#
-#     def __str__(self):
-#       #TODO: Ajustar aqui
-#       return "Teste"
-#
-#     class Meta:
-#         unique_together = (('fk_pessoa_id', 'fk_pessoa_tipo_id'),)
-#         verbose_name_plural = 'Pessoa Tipos'
-
-
 class Evento(models.Model):
     id = models.AutoField(primary_key=True)
-    fk_evento_tipo = models.ForeignKey(Evento_Tipo, on_delete=models.CASCADE)
+    fk_evento_tipo_id = models.ForeignKey(Evento_Tipo, db_column = 'fk_evento_tipo_id', on_delete=models.CASCADE)
     descricao = models.CharField(max_length=50)
     dt_evento = models.DateField()
     dt_cad = models.DateField()
@@ -69,6 +35,7 @@ class Evento(models.Model):
         return self.descricao + "Valor:" + str(self.valor) + " - Parcelas:" + str(self.parcelas)
 
     class Meta:
+        db_table = 'evento'
         ordering = ["dt_evento", "descricao", ]
         verbose_name_plural = 'Eventos'
 
@@ -128,15 +95,15 @@ class Evento(models.Model):
         # print("---getQtPessoa---str(self.id):" + str(self.id))
 
         p_param_id = self.id
-        w_lista = Evento.objects.raw('select id from Evento_Pessoa where fk_evento_id_id=%s', [p_param_id])
+        w_lista = Evento.objects.raw('select id from evento_pessoa where fk_evento_id_id=%s', [p_param_id])
         print("--getQtPessoa---w_lista:" + str(w_lista))
         for reg in w_lista:
              # print(reg) #vai imprimir o __str__
              w_count = w_count + 1
 
-        # for reg in w_lista:
-        #     print(reg.id) #vai imprimir o __str__
-        #     w_count = w_count + 1
+        for reg in w_lista:
+            print(reg.id) #vai imprimir o __str__
+            w_count = w_count + 1
 
         return w_count
 
@@ -148,11 +115,12 @@ class Evento(models.Model):
         w_valor_pago = 0  # valor parcelas quitadas
         p_param_id = self.id
         w_lista = Evento.objects.raw('select lan.id, lan.valor, lan.dt_pgto '+
-                                     'from Evento_Pessoa evp '+
-                                     '   , App_Financeiro_lancto lan '+
+                                     'from evento_pessoa evp '+
+                                     '   , app_financeiro_lancto lan '+
                                      'where lan.fk_evento_pessoa_id = evp.id and evp.fk_evento_id_id =%s'+
                                      '  and lan.cd_tipo = "P" ',
                                      [p_param_id])
+
         for reg in w_lista:
              w_count = w_count + 1
              w_valor = w_valor + reg.valor
@@ -192,14 +160,9 @@ from App_Pessoa.models import Pessoa_Pessoa_Tipo
 
 
 class EventoPessoa(models.Model):
-    fk_evento_id = models.ForeignKey(Evento, on_delete=models.PROTECT)
-    fk_pessoa_pessoa_tipo_id = models.ForeignKey(Pessoa_Pessoa_Tipo, on_delete=models.PROTECT)
-    # fk_pes_pes_tp_pessoa_id = models.ForeignKey('pessoa_pessoa_tipo.fk_pessoa_id', on_delete=models.PROTECT)
-
-    # fk_pes_pes_tp_pessoa_id = models.ForeignKey(Pessoa, on_delete=models.PROTECT)
-
-    # fk_pes_pes_tp_pessoa_id = models.ForeignKey(Pessoa_Pessoa_Tipo, on_delete=models.PROTECT)
-    # fk_pes_pes_tp_pessoa_tipo_id = models.ForeignKey(Pessoa_Pessoa_Tipo, fk_name='fk_pessoa_tipo_id', on_delete=models.PROTECT)
+    id = models.AutoField(primary_key=True)
+    fk_evento_id = models.ForeignKey(Evento, db_column = 'fk_evento_id',on_delete=models.PROTECT)
+    fk_pessoa_pessoa_tipo_id = models.ForeignKey(Pessoa_Pessoa_Tipo, db_column = 'fk_pessoa_pessoa_tipo_id', on_delete=models.PROTECT)
 
     def __str__(self):
         # print("----self.fk_evento_id:" + str(self.fk_evento_id))
@@ -210,7 +173,7 @@ class EventoPessoa(models.Model):
         # return #evento.descricao
 
     class Meta:
-        db_table = 'Evento_Pessoa'
+        db_table = 'evento_pessoa'
         unique_together = (('fk_evento_id', 'fk_pessoa_pessoa_tipo_id', ),)
 
     # recuperar Valor Total dos Lanctos
@@ -218,6 +181,7 @@ class EventoPessoa(models.Model):
         w_count = 0
         w_valor = 0
         p_param_id = self.id
+
         w_lista = Evento.objects.raw('select lan.id, lan.valor as valor '+
                                      'from App_Financeiro_lancto lan '+
                                      'where lan.fk_evento_pessoa_id =%s', [p_param_id])
