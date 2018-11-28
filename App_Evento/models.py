@@ -118,8 +118,8 @@ class Evento(models.Model):
                                      'from evento_pessoa evp '+
                                      '   , titulo t '+
                                      'where t.fk_evento_pessoa_id = evp.id and evp.fk_evento_id =%s'+
-                                     '  and t.cd_tipo = "P" ',
-                                     [p_param_id])
+                                     '  and t.cd_tipo =%s ',
+                                     [p_param_id, 'P'])
 
         for reg in w_lista:
              w_count = w_count + 1
@@ -143,8 +143,8 @@ class Evento(models.Model):
                                      'from Evento_Pessoa evp '+
                                      '   , titulo t '+
                                      'where t.fk_evento_pessoa_id = evp.id and evp.fk_evento_id =%s'+
-                                     '  and t.cd_tipo = "R" ',
-                                     [p_param_id])
+                                     '  and t.cd_tipo =%s ',
+                                     [p_param_id, 'R'])
         for reg in w_lista:
              w_count = w_count + 1
              w_valor = w_valor + reg.valor

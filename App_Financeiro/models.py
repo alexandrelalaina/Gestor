@@ -139,7 +139,7 @@ class Lancto(models.Model):
     class Meta:
         db_table = 'titulo'
         ordering = ["dt_vencto", "dt_cad"]
-        verbose_name_plural = 'Lançamentos'
+        verbose_name_plural = 'títulos'
 
 def save(self, force_insert=False, force_update=False):
     print("SAVE executando save da transacao...")
