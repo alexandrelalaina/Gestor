@@ -95,7 +95,7 @@ class Evento(models.Model):
         # print("---getQtPessoa---str(self.id):" + str(self.id))
 
         p_param_id = self.id
-        w_lista = Evento.objects.raw('select id from evento_pessoa where fk_evento_id_id=%s', [p_param_id])
+        w_lista = Evento.objects.raw('select id from evento_pessoa where fk_evento_id=%s', [p_param_id])
         print("--getQtPessoa---w_lista:" + str(w_lista))
         for reg in w_lista:
              # print(reg) #vai imprimir o __str__
@@ -114,11 +114,11 @@ class Evento(models.Model):
         w_valor = 0
         w_valor_pago = 0  # valor parcelas quitadas
         p_param_id = self.id
-        w_lista = Evento.objects.raw('select lan.id, lan.valor, lan.dt_pgto '+
+        w_lista = Evento.objects.raw('select t.id, t.valor, t.dt_pgto '+
                                      'from evento_pessoa evp '+
-                                     '   , app_financeiro_lancto lan '+
-                                     'where lan.fk_evento_pessoa_id = evp.id and evp.fk_evento_id_id =%s'+
-                                     '  and lan.cd_tipo = "P" ',
+                                     '   , titulo t '+
+                                     'where t.fk_evento_pessoa_id = evp.id and evp.fk_evento_id =%s'+
+                                     '  and t.cd_tipo = "P" ',
                                      [p_param_id])
 
         for reg in w_lista:
@@ -139,11 +139,11 @@ class Evento(models.Model):
         w_valor = 0
         w_valor_pago = 0  # valor parcelas quitadas
         p_param_id = self.id
-        w_lista = Evento.objects.raw('select lan.id, lan.valor, lan.dt_pgto '+
+        w_lista = Evento.objects.raw('select t.id, t.valor, t.dt_pgto '+
                                      'from Evento_Pessoa evp '+
-                                     '   , App_Financeiro_lancto lan '+
-                                     'where lan.fk_evento_pessoa_id = evp.id and evp.fk_evento_id_id =%s'+
-                                     '  and lan.cd_tipo = "R" ',
+                                     '   , titulo t '+
+                                     'where t.fk_evento_pessoa_id = evp.id and evp.fk_evento_id =%s'+
+                                     '  and t.cd_tipo = "R" ',
                                      [p_param_id])
         for reg in w_lista:
              w_count = w_count + 1
@@ -182,9 +182,9 @@ class EventoPessoa(models.Model):
         w_valor = 0
         p_param_id = self.id
 
-        w_lista = Evento.objects.raw('select lan.id, lan.valor as valor '+
-                                     'from App_Financeiro_lancto lan '+
-                                     'where lan.fk_evento_pessoa_id =%s', [p_param_id])
+        w_lista = Evento.objects.raw('select t.id, t.valor as valor '+
+                                     'from titulo t '+
+                                     'where t.fk_evento_pessoa_id =%s', [p_param_id])
 
         for reg in w_lista:
              w_count = w_count + 1
