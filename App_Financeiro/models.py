@@ -142,15 +142,15 @@ class Lancto(models.Model):
         verbose_name_plural = 'títulos'
 
 def save(self, force_insert=False, force_update=False):
-    print("SAVE executando save da transacao...")
+    #print("SAVE executando save da transacao...")
     self.dt_alt = datetime.now()
     super(Lancto, self).save(force_insert, force_update)  # Call the "real" save() method.
 
     if self.dt_pgto is not None:
-        print("PAGO")
+        # print("PAGO")
         return "PAGO"
     else:
-        print("NÃO PAGO")
+        # print("NÃO PAGO")
         return "NÃO PAGO"
 
 
@@ -174,14 +174,14 @@ def save(self, force_insert=False, force_update=False):
 
 @receiver(post_save, sender=Lancto, dispatch_uid="update_stock_count")
 def update_stock(sender, instance, created, **kwargs):
-    print('POST_SAVE DO @RECEIVER...')
-    print('instance.parcela:' + str(instance.parcela)+'/'+str(instance.parcela_total))
-    print('PK:'+str(instance.pk))
+    # print('POST_SAVE DO @RECEIVER...')
+    # print('instance.parcela:' + str(instance.parcela)+'/'+str(instance.parcela_total))
+    # print('PK:'+str(instance.pk))
 
     if created:
-        print('created')
+        # print('created')
         if instance.parcela_total > 1 and instance.parcela == 1:
-            print('---lançar '+str(instance.parcela_total))
+            # print('---lançar '+str(instance.parcela_total))
 
             w_new_id = instance.id
             w_new_parcela = instance.parcela
@@ -200,12 +200,13 @@ def update_stock(sender, instance, created, **kwargs):
                 w_new_parcela = w_new_parcela + 1
                 w_new_instance.parcela = w_new_parcela
 
-                print('novo valor do new:' + str(w_new_instance.id))
-                print('novo parcela do new:' + str(w_new_instance.parcela))
+                # print('novo valor do new:' + str(w_new_instance.id))
+                # print('novo parcela do new:' + str(w_new_instance.parcela))
                 instance.save();
 
     else:
         print('NOT created')
+
 
 
 

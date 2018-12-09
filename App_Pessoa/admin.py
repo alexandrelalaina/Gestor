@@ -33,10 +33,16 @@ class PessoaTipoAdmin(admin.ModelAdmin):
     list_display = ['id', 'descricao', ]
     search_fields = ['id', 'descricao', ]
 
+
+class PessoaPessoaTipoAdmin(admin.ModelAdmin):
+    list_display = ['id', 'fk_pessoa_id', 'fk_pessoa_tipo_id', ]
+    search_fields = ['id', 'fk_pessoa_id__nome', 'fk_pessoa_tipo_id__descricao', ]
+
+
 admin.site.register(Pessoa_Tipo, PessoaTipoAdmin)
 admin.site.register(Pessoa, PessoaAdmin)
 admin.site.register(Contato_Tipo)
 admin.site.register(Endereco_Tipo)
 admin.site.register(Endereco)
 admin.site.register(Contato)
-admin.site.register(Pessoa_Pessoa_Tipo)
+admin.site.register(Pessoa_Pessoa_Tipo, PessoaPessoaTipoAdmin)

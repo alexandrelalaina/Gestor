@@ -3,14 +3,22 @@ from django.contrib import admin
 from .models import Conta, Grupo, TipoPagto, Lancto, LanctoExtrato, Orcamento, Conta_Grupo_Tipo_Pagto
 from .actions import pagar_receber
 
-######## G r u p o #######################################
+
 class OrcamentoInline(admin.TabularInline):
     model = Orcamento
     extra = 1 #qtos itens serao mostrados
 
 
+class ContaAdmin(admin.ModelAdmin):
+    list_display = ['id', 'descricao']
+    search_fields = ['id', 'descricao']
+
+
 class GrupoAdmin(admin.ModelAdmin):
     inlines = [OrcamentoInline, ]
+    list_display = ['id', 'descricao']
+    search_fields = ['id', 'descricao']
+
 
 # def make_published(modeladmin, request, queryset):
 #     queryset.update(status='P')
@@ -48,7 +56,7 @@ class LanctoAdmin(admin.ModelAdmin):
     #exclude = ['observacao']
 
 
-admin.site.register(Conta)
+admin.site.register(Conta, ContaAdmin)
 admin.site.register(Grupo, GrupoAdmin)
 admin.site.register(TipoPagto)
 admin.site.register(Lancto, LanctoAdmin)

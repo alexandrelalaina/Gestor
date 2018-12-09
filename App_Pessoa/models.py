@@ -94,6 +94,9 @@ class Pessoa_Pessoa_Tipo(models.Model):
     def __str__(self):
       #TODO: Ajustar aqui
       return "(" + str(self.id) + ") " +  str(self.fk_pessoa_id) + " (" + str(self.fk_pessoa_tipo_id) + ')'
+      # return str(self.id)
+      # return str(self.fk_pessoa_id)
+
 
 from App_Evento.models import Evento
 

@@ -1,0 +1,13 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+<br>
+<h1>Meu KANBAN - Fluxo de Eventos (Fotografia)</h1>
+<br><br>
+
+{% for data in data_view %}
+    Evento: ({{ data.evento_descr }})<br>
+    Atual: ({{ data.fluxo_descr }})<br>
+    <a href="{% url 'EventoKanbanUpdate' data.fluxo_id %}">Alterar Fluxo</a>
+    <br>
+
+{% endfor %}

@@ -1,3 +1,6 @@
+# 28/11/18 foi qdo subi e migrei o banco de dados do meu amor
+# colocar essa data no projeto
+
 """
 Django settings for Gestor project.
 
@@ -29,10 +32,20 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['gestor-lalaina.herokuapp.com', '127.0.0.1']
 
+# CONFIGURACAO DO APP
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda x: True
+}
+
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
+
+# CONFIGURAÇÃO DE QUAL IP SERÁ MOSTRADO O DEBUG_TOOL_BAR
+INTERNAL_IPS = ['127.0.0.1']
 
 # Application definition
 
 INSTALLED_APPS = [
+    # 'bootstrap_admin',  # always before django.contrib.admin
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,7 +55,13 @@ INSTALLED_APPS = [
     'App_Pessoa',
     'App_Financeiro',
     'App_Evento',
+    'apps.util',
+    'apps.caract',
+    'apps.core',
+
+    # 'debug_toolbar',
 ]
+# debug_toolbar TEM QUE SER O ULTIMO debug_toolbar
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -52,6 +71,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'Gestor.urls'
@@ -59,7 +80,8 @@ ROOT_URLCONF = 'Gestor.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates',],
+        # 'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -113,9 +135,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Sao_Paulo'
+# TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -128,6 +151,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#aquiiii
+MEDIA_URL = '/media/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 

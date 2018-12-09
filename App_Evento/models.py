@@ -15,6 +15,19 @@ class Evento_Tipo(models.Model):
         ordering = ["descricao", ]
         verbose_name_plural = 'Tipos de Eventos'
 
+    def TabelaPreco(self):
+        from apps.caract.models import CaractRel
+        #fk_caract_tipo_id = 3 = tabela de precos
+        w_reg = CaractRel.objects.filter(fk_caract_tipo_id=3).filter(fk_evento_tipo_id=self.id)
+        # :TODO nao entendi o pq tive que abrir um loop para conseguir recuperar o valor
+        for reg in w_reg:
+          if reg.valor_alfa:
+              return str(reg.valor) + ' ' + str(reg.valor_alfa)
+          else:
+              return str(reg.valor)
+
+
+
 
 class Evento(models.Model):
     id = models.AutoField(primary_key=True)
@@ -32,12 +45,31 @@ class Evento(models.Model):
 
     def __str__(self):
         #TODO: retirar parcelas
-        return self.descricao + "Valor:" + str(self.valor) + " - Parcelas:" + str(self.parcelas)
+        return self.descricao
+        # return self.descricao + "Valor:" + str(self.valor) + " - Parcelas:" + str(self.parcelas)
 
     class Meta:
         db_table = 'evento'
         ordering = ["dt_evento", "descricao", ]
         verbose_name_plural = 'Eventos'
+
+    def Fluxo(self):
+        p_param_id = self.id
+        w_lista = Evento.objects.raw('select e.id, cg.rv_meaning ' +
+                                     'from evento e ' +
+                                     '   , caract_rel car ' +
+                                     '   , cg_ref_codes cg ' +
+                                     'where car.fk_evento_id = e.id '+
+                                     '  and car.valor = cg.rv_low_value '+
+                                     '  and car.fk_caract_tipo_id = 1 ' + #Fluxo Fotografia
+                                     '  and e.id = %s  '
+                                     '  and cg.rv_domain = %s '
+                                     ,[p_param_id,
+                                       'EVENTO.FLUXO'])
+        for reg in w_lista:
+             return reg.rv_meaning
+        return '-'
+
 
     # def getQtLanctos(self):
         # w_count = F.sum(Lancto.objects.get(pk=self.id))
@@ -96,13 +128,13 @@ class Evento(models.Model):
 
         p_param_id = self.id
         w_lista = Evento.objects.raw('select id from evento_pessoa where fk_evento_id=%s', [p_param_id])
-        print("--getQtPessoa---w_lista:" + str(w_lista))
+        # print("--getQtPessoa---w_lista:" + str(w_lista))
         for reg in w_lista:
              # print(reg) #vai imprimir o __str__
              w_count = w_count + 1
 
         for reg in w_lista:
-            print(reg.id) #vai imprimir o __str__
+            # print(reg.id) #vai imprimir o __str__
             w_count = w_count + 1
 
         return w_count
@@ -125,7 +157,7 @@ class Evento(models.Model):
              w_count = w_count + 1
              w_valor = w_valor + reg.valor
              if reg.dt_pgto:
-                print("Pago => " + str(reg.dt_pgto))
+                # print("Pago => " + str(reg.dt_pgto))
                 w_count_pago = w_count_pago + 1
                 w_valor_pago = w_valor_pago + reg.valor
 
@@ -149,7 +181,7 @@ class Evento(models.Model):
              w_count = w_count + 1
              w_valor = w_valor + reg.valor
              if reg.dt_pgto:
-                print("Pago => " + str(reg.dt_pgto))
+                # print("Pago => " + str(reg.dt_pgto))
                 w_count_pago = w_count_pago + 1
                 w_valor_pago = w_valor_pago + reg.valor
 

@@ -4,3 +4,5 @@ venv
 *.sqlite3
 *pyc
 .env
+Scripts
+staticfiles/debug_toolbar/
