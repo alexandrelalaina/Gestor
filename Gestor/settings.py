@@ -33,14 +33,14 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = ['gestor-lalaina.herokuapp.com', '127.0.0.1']
 
 # CONFIGURACAO DO APP
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': lambda x: True
-}
+# DEBUG_TOOLBAR_CONFIG = {
+#     'SHOW_TOOLBAR_CALLBACK': lambda x: True
+# }
 
-DEBUG_TOOLBAR_PATCH_SETTINGS = False
+# DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 # CONFIGURAÇÃO DE QUAL IP SERÁ MOSTRADO O DEBUG_TOOL_BAR
-INTERNAL_IPS = ['127.0.0.1']
+# INTERNAL_IPS = ['127.0.0.1']
 
 # Application definition
 
@@ -75,7 +75,7 @@ MIDDLEWARE = [
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-ROOT_URLCONF = 'Gestor.urls'
+ROOT_URLCONF = 'Gestorgit a.urls'
 
 TEMPLATES = [
     {
