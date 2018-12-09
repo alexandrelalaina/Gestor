@@ -75,7 +75,7 @@ MIDDLEWARE = [
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-ROOT_URLCONF = 'Gestorgit a.urls'
+ROOT_URLCONF = 'Gestor.urls'
 
 TEMPLATES = [
     {
