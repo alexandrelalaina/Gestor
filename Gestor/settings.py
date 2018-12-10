@@ -52,12 +52,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'apps.util',
     'App_Pessoa',
     'App_Financeiro',
     'App_Evento',
-    'apps.util',
     'apps.caract',
     'apps.core',
+    # 'psycopg2',
 
     # 'debug_toolbar',
 ]

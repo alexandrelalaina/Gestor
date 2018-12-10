@@ -60,7 +60,7 @@ class Evento(models.Model):
                                      '   , caract_rel car ' +
                                      '   , cg_ref_codes cg ' +
                                      'where car.fk_evento_id = e.id '+
-                                     '  and car.valor = cg.rv_low_value '+
+                                     '  and car.valor = CAST(cg.rv_low_value AS INTEGER) '+ ### tiver que fazer o cast por conta de ser varchar2 a coluna do cg_ref_codes
                                      '  and car.fk_caract_tipo_id = 1 ' + #Fluxo Fotografia
                                      '  and e.id = %s  '
                                      '  and cg.rv_domain = %s '

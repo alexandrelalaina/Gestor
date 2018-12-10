@@ -4,7 +4,6 @@ from django.views.generic import ListView, UpdateView
 
 from App_Evento.models import Evento
 from apps.caract.models import CaractRel
-from apps.util.models import CgRefCodes
 
 
 def home(request):
